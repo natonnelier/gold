@@ -90,7 +90,7 @@ defmodule Gold do
   Get detailed information about in-wallet transaction.
   """
   def gettransaction(name, txid) do
-    case call(name, {:gettransaction, [txid]}) do
+    case call(name, {:gettransaction, [txid, true]}) do
       {:ok, transaction} ->
         {:ok, Transaction.from_json transaction}
       otherwise ->
@@ -151,6 +151,23 @@ defmodule Gold do
   """
   def generate!(name, amount) do
     {:ok, result} = generate(name, amount)
+    result
+  end
+
+  @doc """
+  Returns the total amount received by the specified address in transactions
+  with the specified number of confirmations
+  """
+  def getreceivedbyaddress(name, address) do
+    call(name, {:getreceivedbyaddress, [address, 1]})
+  end
+
+  def getreceivedbyaddress(name, address, confirmations) do
+    call(name, {:getreceivedbyaddress, [address, confirmations]})
+  end
+
+  def getreceivedbyaddress!(name, address, confirmations \\ nil) do
+    {:ok, result} = getreceivedbyaddress(name, address, confirmations)
     result
   end
 

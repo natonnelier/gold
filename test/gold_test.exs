@@ -25,6 +25,12 @@ defmodule GoldTest do
     assert Decimal.decimal?(balance)
   end
 
+  test "getreceivedbyaddress", %{btc: name} do
+    address = "1FFw3LqSKXDLQTLE4yzVUY2QugVD5q5auF"
+    {:ok, received} = Gold.getreceivedbyaddress(name, address)
+    assert Decimal.decimal?(received)
+  end
+
   test "getnewaddress", %{btc: name} do
     address = Gold.getnewaddress!(name)
     assert String.length(address) >= 26
