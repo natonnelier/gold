@@ -155,23 +155,6 @@ defmodule Gold do
   end
 
   @doc """
-  Returns the total amount received by the specified address in transactions
-  with the specified number of confirmations
-  """
-  def getreceivedbyaddress(name, address) do
-    call(name, {:getreceivedbyaddress, [address, 1]})
-  end
-
-  def getreceivedbyaddress(name, address, confirmations) do
-    call(name, {:getreceivedbyaddress, [address, confirmations]})
-  end
-
-  def getreceivedbyaddress!(name, address, confirmations \\ nil) do
-    {:ok, result} = getreceivedbyaddress(name, address, confirmations)
-    result
-  end
-
-  @doc """
   https://bitcoin.org/en/developer-reference#getblock
   """
   def getblock(name, hash) do
@@ -229,6 +212,63 @@ defmodule Gold do
   def gettxout!(name, txid, n \\ 1) do
     {:ok, txout} = gettxout(name, txid, n)
     txout
+  end
+
+  @doc """
+  https://bitcoin.org/en/developer-reference#createrawtransaction
+  """
+  def createrawtransaction(name, inputs, P2SH_address) do
+    call(name, {:createrawtransaction, [inputs, P2SH_address]})
+  end
+
+  def createrawtransaction(name, inputs, P2SH_address, locktime) do
+    call(name, {:createrawtransaction, [inputs, P2SH_address, locktime]})
+  end
+
+  def createrawtransaction!(name, inputs, P2SH_address, locktime // 0) do
+    {:ok, result} = createrawtransaction(inputs, P2SH_address, locktime)
+    result
+  end
+
+  @doc """
+  Returns the total amount received by the specified address in transactions
+  with the specified number of confirmations
+  """
+  def getreceivedbyaddress(name, address) do
+    call(name, {:getreceivedbyaddress, [address, 1]})
+  end
+
+  def getreceivedbyaddress(name, address, confirmations) do
+    call(name, {:getreceivedbyaddress, [address, confirmations]})
+  end
+
+  def getreceivedbyaddress!(name, address, confirmations \\ nil) do
+    {:ok, result} = getreceivedbyaddress(name, address, confirmations)
+    result
+  end
+
+  @doc """
+  https://bitcoin.org/en/developer-reference#decoderawtransaction
+  """
+  def decoderawtransaction(name, transaction_hex) do
+    call(name, {:decoderawtransaction,[transaction_hex]})
+  end
+
+  def decoderawtransaction!(name, transaction_hex) do
+    {:ok, tx_hash} = call(name, {:decoderawtransaction, [transaction_hex]})
+    tx_hash
+  end
+
+  @doc """
+  https://bitcoin.org/en/developer-reference#estimatefee
+  """
+  def estimatefee(name, blocks) do
+    call(name, {:estimatefee, [blocks]})
+  end
+
+  def estimatefee!(name, blocks) do
+    {:ok, fee} = call(name, {:estimatefee, [blocks]})
+    fee
   end
 
   @info_methods ~w(getblockchaininfo
