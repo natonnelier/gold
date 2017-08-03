@@ -271,6 +271,37 @@ defmodule Gold do
     fee
   end
 
+  @doc """
+  https://bitcoin.org/en/developer-reference#getbestblockhash
+  """
+  def getbestblockhash(name) do
+    call(name, {:getbestblockhash})
+  end
+  def getbestblockhash!(name) do
+    {:ok, block_hash} = call(name, {:getbestblockhash})
+    block_hash
+  end
+
+  @doc """
+  https://bitcoin.org/en/developer-reference#listunspent
+  """
+  def listunspent(name) do
+    call(name, {:listunspent})
+  end
+  def listunspent(name, min_confirmations) do
+    call(name, {:listunspent, [min_confirmations]})
+  end
+  def listunspent(name, min_confirmations, max_confirmations) do
+    call(name, {:listunspent, [min_confirmations, max_confirmations]})
+  end
+  def listunspent(name, min_confirmations, max_confirmations, addresses) do
+    call(name, {:listunspent, [min_confirmations, max_confirmations, addresses]})
+  end
+  def listunspent!(name, min_confirmations \\ nil, max_confirmations \\ nil, addresses \\ nil) do
+    {:ok, result} = call(name, {:listunspent, [min_confirmations, max_confirmations, addresses]})
+    result
+  end
+
   @info_methods ~w(getblockchaininfo
                    getmempoolinfo
                    gettxoutsetinfo

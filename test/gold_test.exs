@@ -165,8 +165,19 @@ defmodule GoldTest do
     assert Decimal.decimal?(fee)
   end
 
+  test "getbestblockhash", %{btc: name} do
+    block_hash = Gold.getbestblockhash!(name)
+    assert String.length(block_hash) > 30
+  end
+
   test "getblockcount!", %{btc: name} do
     assert Gold.getblockcount!(name) > 0
+  end
+
+  test "listunspent!", %{btc: name} do
+    unspent_outputs = Gold.listunspent!(name)
+    assert length(unspent_outputs) > 0
+    assert Decimal.decimal?(unspent_outputs[0]["vout"])
   end
 
   test "gettxout!", %{btc: name} do
