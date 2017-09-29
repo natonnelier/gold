@@ -225,7 +225,7 @@ defmodule Gold do
     call(name, {:createrawtransaction, [inputs, P2SH_address, locktime]})
   end
 
-  def createrawtransaction!(name, inputs, P2SH_address, locktime // 0) do
+  def createrawtransaction!(name, inputs, P2SH_address, locktime \\ 0) do
     {:ok, result} = createrawtransaction(inputs, P2SH_address, locktime)
     result
   end
@@ -300,6 +300,34 @@ defmodule Gold do
   def listunspent!(name, min_confirmations \\ nil, max_confirmations \\ nil, addresses \\ nil) do
     {:ok, result} = call(name, {:listunspent, [min_confirmations, max_confirmations, addresses]})
     result
+  end
+
+  @doc """
+  https://bitcoin.org/en/developer-reference#listreceivedbyaddress
+  """
+  def listreceivedbyaddress(name, confirmations \\ 1, include_empty \\ true, true) do
+    call(name, {:listreceivedbyaddress, [confirmations, include_empty, true]})
+  end
+  def listreceivedbyaddress!(name, confirmations \\ 1, include_empty \\ true, true) do
+    {:ok, result} = call(name, {:listreceivedbyaddress, [confirmations, include_empty, true]})
+    result
+  end
+
+  @doc """
+  https://bitcoin.org/en/developer-reference#listsinceblock
+  """
+  def listsinceblock(name) do
+    call(name, {:listsinceblock, [nil, nil, true]})
+  end
+  def listsinceblock(name, hsh) do
+    call(name, {:listsinceblock, [hsh, nil, true]})
+  end
+  def listsinceblock(name, hsh, confirmations) do
+    call(name, {:listsinceblock, [hsh, confirmations, true]})
+  end
+  def listsinceblock!(name, hsh, confirmations) do
+    {:ok, transactions} = call(name, {:listsinceblock, [hsh, confirmations, true]})
+    transactions
   end
 
   @info_methods ~w(getblockchaininfo

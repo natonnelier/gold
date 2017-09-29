@@ -180,6 +180,16 @@ defmodule GoldTest do
     assert Decimal.decimal?(unspent_outputs[0]["vout"])
   end
 
+  test "listreceivedbyaddress!", %{btc: name} do
+    addresses = Gold.listreceivedbyaddress!(name)
+    assert Decimal.decimal?(addresses[0]["amount"])
+  end
+
+  test "listsinceblock!", %{btc: name} do
+    transactions = Gold.listsinceblock!(name)
+    assert Decimal.decimal?(transactions[0]["amount"])
+  end
+
   test "gettxout!", %{btc: name} do
     [hash] = Gold.generate!(name, 1)
     block = Gold.getblock!(name, hash)
